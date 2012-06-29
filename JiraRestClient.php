@@ -86,6 +86,14 @@ class JiraRestClient
     return $this->api('GET', '/rest/auth/latest/session');
   }
 
+  public function addWorklog($issue_id, $comment, $minutes)
+  {
+    return $this->api('POST', '/rest/api/2/issue/' . $issue_id. '/worklog', array(
+       'comment' =>  $comment,
+       'timeSpent' => sprintf('%dm', $minutes)
+      ));
+  }
+
   public function api($method = "GET", $url, $data = array())
   {
     $data = json_encode($data);
