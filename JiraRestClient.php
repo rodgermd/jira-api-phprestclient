@@ -119,6 +119,13 @@ class JiraRestClient
       stream_context_create($context)
     );
 
+    if ($data === false)
+    {
+      preg_match('#^HTTP\S+\s(\d+)\s#', $http_response_header[0], $matches);
+      $http_response_code = @$matches[1] ?: 0;
+      if (in_array($http_response_code, array(0, 400, 404))) throw new IssueConnectionError();
+    }
+
     return json_decode($data, true);
   }
 }
